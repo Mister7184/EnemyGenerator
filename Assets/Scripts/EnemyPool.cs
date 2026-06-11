@@ -5,7 +5,7 @@ public class EnemyPool : MonoBehaviour
 {
     [SerializeField] private Enemy _enemyPrefab;
 
-    private List<Enemy> _freeEnemiesList = new List<Enemy>();
+    private Queue<Enemy> _freeEnemiesList = new Queue<Enemy>();
     private int _enemiesMaxCount = 10;
 
     private void Awake()
@@ -21,8 +21,7 @@ public class EnemyPool : MonoBehaviour
         Enemy enemy = Instantiate(_enemyPrefab);
 
         enemy.gameObject.SetActive(false);
-
-        _freeEnemiesList.Add(enemy);
+        _freeEnemiesList.Enqueue(enemy);
     }
 
     public Enemy Get()
@@ -30,9 +29,7 @@ public class EnemyPool : MonoBehaviour
         if(_freeEnemiesList.Count == 0)
             Create();
 
-        Enemy enemy = _freeEnemiesList[0];
-        _freeEnemiesList.RemoveAt(0);
-
+        Enemy enemy = _freeEnemiesList.Dequeue();
         enemy.gameObject.SetActive(true);
 
         return enemy;
@@ -41,7 +38,6 @@ public class EnemyPool : MonoBehaviour
     public void Release(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
-
-        _freeEnemiesList.Add(enemy);
+        _freeEnemiesList.Enqueue(enemy);
     }
 }

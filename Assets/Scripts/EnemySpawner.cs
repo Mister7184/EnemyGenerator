@@ -5,14 +5,16 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private EnemyPool _pool;
-    [SerializeField] private Transform _targetEnemy;
+    [SerializeField] private Vector2 _direction = new Vector2(0,-1);
     [SerializeField] private List<Transform> _spawnPoints;
 
     private float _spawnDelaySeconds = 2f;
     private bool _isWork = true;
+    private WaitForSeconds _spawnDelay;
 
     public void Start()
     {
+        _spawnDelay = new WaitForSeconds(_spawnDelaySeconds);
         StartCoroutine(EnemySpawnWithDelay());
     }
 
@@ -23,21 +25,19 @@ public class EnemySpawner : MonoBehaviour
             int randomSpawnPoint = Random.Range(0, _spawnPoints.Count);
 
             Enemy enemy = _pool.Get();
-
-            enemy.TouchedTarget += OnTouchedTarget;
+            enemy.LifeTimeEnded += OnLifeTimeEnded;
 
             enemy.transform.position = _spawnPoints[randomSpawnPoint].position;
 
-            enemy.SetTarget(_targetEnemy);
+            enemy.SetDirectionForMove(_direction);
 
-            yield return new WaitForSeconds(_spawnDelaySeconds);
+            yield return _spawnDelay;
         }
     }
 
-    private void OnTouchedTarget(Enemy enemy) 
+    private void OnLifeTimeEnded(Enemy enemy)
     {
-        enemy.TouchedTarget -= OnTouchedTarget;
-
+        enemy.LifeTimeEnded -= OnLifeTimeEnded;
         _pool.Release(enemy);
     }
 }

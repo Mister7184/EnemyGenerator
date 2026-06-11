@@ -1,26 +1,33 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMover))]
 public class Enemy : MonoBehaviour
 {
     private EnemyMover _enemyMover;
+    private float _lifeTimeSeconds = 2f;
+    private WaitForSeconds _lifeTime;
 
-    public Action<Enemy> TouchedTarget;
+    public Action<Enemy> LifeTimeEnded;
 
     private void Awake()
     {
         _enemyMover = GetComponent<EnemyMover>();
+        _lifeTime = new WaitForSeconds(_lifeTimeSeconds);
     }
 
-    public void SetTarget(Transform target) 
+    public void SetDirectionForMove(Vector2 direction) 
     {
-        _enemyMover.UseMove(target);
+        _enemyMover.StartMove(direction);
+
+        StartCoroutine(ReturnAfterTime());
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private IEnumerator ReturnAfterTime() 
     {
-        if (other.gameObject.TryGetComponent<Target>(out Target target) == true)
-            TouchedTarget?.Invoke(this);
+        yield return _lifeTime;
+
+        LifeTimeEnded?.Invoke(this);
     }
 }
