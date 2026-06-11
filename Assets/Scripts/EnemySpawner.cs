@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     private bool _isWork = true;
     private WaitForSeconds _spawnDelay;
 
-    public void Start()
+    private void Start()
     {
         _spawnDelay = new WaitForSeconds(_spawnDelaySeconds);
         StartCoroutine(EnemySpawnWithDelay());

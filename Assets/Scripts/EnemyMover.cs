@@ -9,7 +9,7 @@ public class EnemyMover : MonoBehaviour
     private Vector2 _direction;
     private Rigidbody2D _rigidbody;
 
-    public void Awake()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
