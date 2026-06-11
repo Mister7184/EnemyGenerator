@@ -20,19 +20,15 @@ public class EnemySpawner : MonoBehaviour
     {
         while (_isWork)
         {
-            List<Transform> availablePoints = new List<Transform>(_spawnPoints);
-
-            int randomSpawnPoint = Random.Range(0, availablePoints.Count);
+            int randomSpawnPoint = Random.Range(0, _spawnPoints.Count);
 
             Enemy enemy = _pool.Get();
 
             enemy.TouchedTarget += OnTouchedTarget;
 
-            enemy.transform.position = availablePoints[randomSpawnPoint].position;
+            enemy.transform.position = _spawnPoints[randomSpawnPoint].position;
 
             enemy.SetTarget(_targetEnemy);
-
-            availablePoints.RemoveAt(randomSpawnPoint);
 
             yield return new WaitForSeconds(_spawnDelaySeconds);
         }
