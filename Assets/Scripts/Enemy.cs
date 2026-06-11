@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     private EnemyMover _enemyMover;
 
     public Action<Enemy> TouchedTarget;
+
     private void Awake()
     {
         _enemyMover = GetComponent<EnemyMover>();
