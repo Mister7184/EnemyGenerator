@@ -36,8 +36,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnTouchedTarget(Enemy enemy) 
     {
-        _pool.Release(enemy);
-
         enemy.TouchedTarget -= OnTouchedTarget;
+
+        _pool.Release(enemy);
     }
 }
